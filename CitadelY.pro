@@ -29,19 +29,30 @@ SOURCES += \
         mainwindow.cpp \
     environment.cpp \
     asset.cpp \
-    ipsp.cpp
+    ipsp.cpp \
+    layeritem.cpp \
+    evaluate.cpp \
+    referencetable.cpp \
+    initevent.cpp
 
 HEADERS += \
         mainwindow.h \
     environment.h \
     asset.h \
-    ipsp.h
+    ipsp.h \
+    layeritem.h \
+    evaluate.h \
+    referencetable.h \
+    initevent.h
 
 FORMS += \
         mainwindow.ui \
     environment.ui \
     asset.ui \
-    ipsp.ui
+    ipsp.ui \
+    evaluate.ui \
+    referencetable.ui \
+    initevent.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

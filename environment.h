@@ -3,7 +3,10 @@
 
 #include <QDialog>
 #include "asset.h"
+
 #include <QVector>
+
+
 namespace Ui {
 class environment;
 }
@@ -47,6 +50,9 @@ private:
     QVector<asset*>assetArr;
 
     QVector<ipsp*>outerIPSParr;
+
+
+
 };
 
 #endif // ENVIRONMENT_H

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Create Environment</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -37,13 +37,7 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QTreeWidget" name="treeWidget_2">
-           <column>
-            <property name="text">
-             <string notr="true">1</string>
-            </property>
-           </column>
-          </widget>
+          <widget class="QTreeWidget" name="treeWidget_2"/>
          </item>
         </layout>
        </widget>
@@ -59,7 +53,7 @@
      <item>
       <widget class="QPushButton" name="addIPSP">
        <property name="text">
-        <string>Add IPSP</string>
+        <string>Add Surrounding IPSP</string>
        </property>
       </widget>
      </item>

@@ -1,6 +1,6 @@
 #include "ipsp.h"
 #include "ui_ipsp.h"
-
+#include <QMessageBox>
 ipsp::ipsp(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ipsp)
@@ -41,7 +41,12 @@ void ipsp::on_closeButton_clicked()
 
 void ipsp::on_addButton_clicked()
 {
-    setIPSP();
-    emit ipspSignal(this);
-    this->close();
+    if(name == " ") {
+        QMessageBox::StandardButton error;
+        error = QMessageBox::information(this,"ERROR:", "ERROR:\n\nPlease Enter Name\n\n");
+    } else {
+        setIPSP();
+        emit ipspSignal(this);
+        this->close();
+    }
 }

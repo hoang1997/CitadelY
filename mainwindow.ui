@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>522</width>
     <height>470</height>
    </rect>
   </property>
@@ -20,37 +20,27 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Tree View</string>
          </attribute>
-         <widget class="QTreeWidget" name="treeWidget">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>0</y>
-            <width>341</width>
-            <height>271</height>
-           </rect>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget"/>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tab_2">
          <attribute name="title">
           <string>Diagram View</string>
          </attribute>
-         <widget class="QGraphicsView" name="graphicsView">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>351</width>
-            <height>281</height>
-           </rect>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QGraphicsView" name="graphicsView"/>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>
@@ -77,10 +67,17 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>522</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionTable_Reference"/>
+   </widget>
+   <addaction name="menuView"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -91,6 +88,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionTable_Reference">
+   <property name="text">
+    <string>Table Reference</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

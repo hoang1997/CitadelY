@@ -1,6 +1,6 @@
 #include "environment.h"
 #include "ui_environment.h"
-
+#include <QMessageBox>
 environment::environment(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::environment)
@@ -76,13 +76,18 @@ void environment::on_addIPSP_clicked()
     ip = new ipsp();
     connect(ip, SIGNAL(ipspSignal(ipsp*)),this,SLOT(addOuterIPSP(ipsp*)),Qt::UniqueConnection);
     connect(ip, SIGNAL(ipspSignal(ipsp*)),this,SLOT(setTreeWidgetIPSP(ipsp*)),Qt::UniqueConnection);
-
     ip->setModal(true);
     ip->exec();
 }
 
 void environment::on_createButton_clicked()
 {
-    emit envSignal(assetArr, outerIPSParr);
-    this->close();
+    if(outerIPSParr.length() == 0 || assetArr.length()== 0) {
+        QMessageBox::StandardButton error;
+        error = QMessageBox::information(this,"ERROR:", "ERROR:\n\nAsset or Outer IPSP has not been created\n\n"
+                                                        "TIP: Create a perimeter of 0 if there is no outer layer");
+    } else {
+        emit envSignal(assetArr, outerIPSParr);
+        this->close();
+    }
 }
