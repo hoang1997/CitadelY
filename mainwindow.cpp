@@ -124,12 +124,18 @@ void MainWindow::createGraphicsLayer(QVector<asset*> a, QVector<ipsp*> o)
 
 void MainWindow::on_createButton_clicked()
 {
-    env = new environment;
-    connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(setAssetIPSP(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
-    connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(setTreeWidget(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
-    connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(createGraphicsLayer(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
-    env->setModal(true);
-    env->show();
+    if(assetArr.length()>0)
+    {
+        displayError("Environment Already Created\n\nPlease Clear Current Environment");
+    } else {
+        env = new environment;
+        connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(setAssetIPSP(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
+        connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(setTreeWidget(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
+        connect(env, SIGNAL(envSignal(QVector<asset*>, QVector<ipsp*>)), this, SLOT(createGraphicsLayer(QVector<asset*>, QVector<ipsp*>)), Qt::UniqueConnection);
+        env->setModal(true);
+        env->show();
+    }
+
 }
 
 void MainWindow::on_evaluateButton_clicked()
@@ -158,4 +164,12 @@ void MainWindow::displayError(QString errorMessage){
     QMessageBox::StandardButton error;
     error = QMessageBox::information(this,"ERROR:", errorMessage);
 
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    assetArr.clear();
+    outerIPSParr.clear();
+    ui->treeWidget->clear();
+    scene->clear();
 }

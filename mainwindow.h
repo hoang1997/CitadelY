@@ -42,6 +42,8 @@ private slots:
 
     void on_actionTable_Reference_triggered();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QVector<asset*> assetArr;
