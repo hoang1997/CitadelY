@@ -7,7 +7,9 @@
 #include <QTreeWidgetItem>
 #include <iomanip>
 #include <QColor>
-//r = tf * (likelihood  - sum(credits(ipl)))
+#include <vector>
+#include <algorithm>
+
 evaluate::evaluate(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::evaluate)
@@ -40,7 +42,6 @@ void evaluate::setTableData(QVector<asset*> a, QVector<ipsp*> o) {
     outerArray = o;
     for(int i = 0; i < a.size(); i++)
     {
-        ui->tableWidget_2->setRowCount(a[i]->getIPSPs().length());
         double outerCredits = 0;
         for(int j = 0; j < o.length(); j++) {
             outerCredits += o[j]->getPFD();
@@ -59,7 +60,7 @@ void evaluate::setTableData(QVector<asset*> a, QVector<ipsp*> o) {
         QTableWidgetItem *aLevel = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
         QTableWidgetItem *rLevel = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
         target->setText(a[i]->getName());
-        QBrush brush;
+        QBrush brush(Qt::blue);
         if (a[i]->getDamageLevel() == "LIMITED") {
 
             brush.setColor(Qt::darkGreen);
@@ -88,54 +89,45 @@ void evaluate::setTableData(QVector<asset*> a, QVector<ipsp*> o) {
 
         pDamage->setText(a[i]->getDamageLevel());
 
-        if(avRisk < 20) {
+        if(avRisk < 20 && avRisk > 0 ) {
             r->setText("LIMITED");
             brush.setColor(Qt::darkGreen);
             r->setBackground(brush);
-        }
-        else if (avRisk >= 20 && avRisk < 40) {
+        } else if (avRisk >= 20 && avRisk < 40) {
             r->setText("ACCEPTABLE");
             brush.setColor(Qt::green);
             r->setBackground(brush);
-        }
-        else if(avRisk >= 40 && avRisk < 60) {
+        } else if(avRisk >= 40 && avRisk < 60) {
             r->setText("MODERATE");
             brush.setColor(QColor(255,165,0));
             r->setBackground(brush);
-        }
-        else if(avRisk >= 60 && avRisk < 80) {
+        } else if(avRisk >= 60 && avRisk < 80) {
             r->setText("HIGH");
             QBrush brush(Qt::red);
             r->setBackground(brush);
-        }
-        else if(avRisk >= 80 && avRisk <= 100) {
+        } else if(avRisk >= 80 && avRisk <= 100) {
             r->setText("SEVERE");
             QBrush brush(Qt::darkRed);
             r->setBackground(brush);
         }
 
-        if(rRisk < 20) {
+        if(rRisk < 20 && rRisk > 0) {
             rr->setText("LIMITED");
             brush.setColor(Qt::darkGreen);
             rr->setBackground(brush);
-        }
-        else if (rRisk >= 20 && rRisk < 40) {
+        } else if (rRisk >= 20 && rRisk < 40) {
             rr->setText("ACCEPTABLE");
             brush.setColor(QColor(255,165,0));
             rr->setBackground(brush);
-        }
-        else if(rRisk >= 40 && rRisk < 60) {
+        } else if(rRisk >= 40 && rRisk < 60) {
             rr->setText("MODERATE");
-
             brush.setColor(QColor(255,165,0));
             rr->setBackground(brush);
-        }
-        else if(rRisk >= 60 && rRisk < 80) {
+        } else if(rRisk >= 60 && rRisk < 80) {
             rr->setText("HIGH");
             brush.setColor(Qt::darkGreen);
             rr->setBackground(brush);
-        }
-        else if(rRisk >= 80 && rRisk <= 100) {
+        } else if(rRisk >= 80 && rRisk <= 100) {
             rr->setText("SEVERE");
             brush.setColor(Qt::darkGreen);
             rr->setBackground(brush);
@@ -163,39 +155,50 @@ void evaluate::setTableData(QVector<asset*> a, QVector<ipsp*> o) {
 
 void evaluate::setLayerTableData(QVector<asset *> a, QVector<ipsp *>outer)
 {
-    ui->tableWidget_2->setRowCount(20);
-    int c = 0;
+    setCalc(a, outer);
+    QVector<ipsp*> totalVector;
     for(int i = 0; i < a.length(); i++)
     {
-        qDebug() << a[i]->getName();
-
-        for(int j = 0; j < a[i]->getIPSPs().length(); j++)
-        {
-
-            QTableWidgetItem *layer = new QTableWidgetItem();
-            QTableWidgetItem *PFD = new QTableWidgetItem();
-            QTableWidgetItem *credits = new QTableWidgetItem();
-            QTableWidgetItem *inv = new QTableWidgetItem();
-
-            layer->setText(a[i]->getIPSPs()[j]->getName());
-            PFD->setText(QString::number(a[i]->getIPSPs()[j]->getPFD()));
-            credits->setText(QString::number(-log(a[i]->getIPSPs()[j]->getPFD())));
-            if(a[i]->getIPSPs()[j]->getPFD() > upper || a[i]->getIPSPs()[j]->getPFD() < lower) {
-                 inv->setText("YES");
-            } else {inv->setText("NO");}
-
-            ui->tableWidget_2->setItem(c, 0, layer);
-            ui->tableWidget_2->setItem(c, 1, PFD);
-            ui->tableWidget_2->setItem(c, 2, credits);
-            ui->tableWidget_2->setItem(c, 3, inv);
-            c++;
-            qDebug() << c;
+        for(int j = 0; j < a[i]->getIPSPs().length(); j++) {
+            totalVector.push_back(a[i]->getIPSPs()[j]);
         }
+
     }
+    for(int i = 0; i < outer.length(); i++)
+    {
+        totalVector.push_back(outer[i]);
+    }
+    ui->tableWidget_2->setRowCount(totalVector.length());
+    qDebug() << totalVector.length();
+    for(int i = 0; i < totalVector.length() ; ++i)
+    {
+        QTableWidgetItem *layer = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
+        QTableWidgetItem *PFD = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
+        QTableWidgetItem *credits = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
+        QTableWidgetItem *inv = new QTableWidgetItem(tr("%1").arg((i+1)*(i+1)));
+
+        layer->setText(totalVector[i]->getName());
+        PFD->setText(QString::number(totalVector[i]->getPFD()));
+        credits->setText(QString::number(-log(totalVector[i]->getPFD())));
+        if(totalVector[i]->getPFD() > upper) {
+             inv->setText("YES(HIGH)");
+        } else if(totalVector[i]->getPFD() < lower) {
+            inv->setText("YES(LOW)");
+        } else{inv->setText("NO");}
+
+        ui->tableWidget_2->setItem(i, 0, layer);
+        ui->tableWidget_2->setItem(i, 1, PFD);
+        ui->tableWidget_2->setItem(i, 2, credits);
+        ui->tableWidget_2->setItem(i, 3, inv);
+
+    }
+
+    qDebug() << upper << " " << lower;
 }
 
 void evaluate::setInitEventTreeWidget(QVector<asset *> a, QVector<ipsp *> o)
 {
+
     ui->treeWidget->clear();
     for(int i = 0; i < a.length();i++ )
     {
@@ -225,6 +228,8 @@ void evaluate::setCalc(QVector<asset *>a, QVector<ipsp *>o)
     mean = 0;
     sumOfSD = 0;
     sd = 0;
+    upper = 0;
+    lower = 0;
     int sum = o.size();
     for(int i = 0; i < a.length(); i++)
     {
@@ -259,6 +264,9 @@ void evaluate::setCalc(QVector<asset *>a, QVector<ipsp *>o)
 
     }
     sd = sqrt(sumOfSD/sum - 1);
+    upper = mean + sd;
+    lower = mean - sd;
+    qDebug() << sd << upper << lower;
 }
 
 void evaluate::setDiagram(QPixmap image)

@@ -12,11 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     eval = new evaluate(this);
-    connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setTableData);
-    connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setLayerTableData);
     connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setCalc);
+    connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setTableData);    
+    connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setLayerTableData);
     connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setInitEventTreeWidget);
-    connect(this, &MainWindow::tableDataSignal, eval, &evaluate::setTableData);
+
     connect(this, &MainWindow::diagramSignal, eval, &evaluate::setDiagram);
 
     scene = new QGraphicsScene(this);

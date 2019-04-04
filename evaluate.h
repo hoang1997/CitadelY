@@ -39,15 +39,15 @@ private:
     QGraphicsScene *scene;
     QPixmap pixmap;
 
-    double mean = 0;
-    double sumOfSD = 0;
-    double sd = 0;
-    double upper = mean + sd;
-    double lower = mean - sd;
-    double sumOfCredits = 0;
-    double avPFD = 0;
-    double avRisk = 0;
-    double rRisk = 0;
+    double mean;
+    double sumOfSD;
+    double sd;
+    double upper;
+    double lower;
+    double sumOfCredits;
+    double avPFD;
+    double avRisk;
+    double rRisk;
 };
 
 #endif // EVALUATE_H
